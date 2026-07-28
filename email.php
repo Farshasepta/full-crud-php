@@ -19,8 +19,9 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 $mail = new PHPMailer(true);
+
 // server settings
-$mail->SMTPDebug = 2;
+$mail->SMTPDebug = 0;
 $mail->isSMTP();
 $mail->Host       = 'smtp.gmail.com';
 $mail->SMTPAuth   = true;
@@ -30,27 +31,21 @@ $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
 $mail->Port       = 587;
 
 if (isset($_POST['tambah'])) {
-    // recipients
-    $mail->setFrom('farshasepta064@gmail.com', 'Admin');
-    $mail->addAddress($_POST['email_penerima']);
-    $mail->addReplyTo('farshasepta064@gmail.com', 'Admin');
+    try {
+        $mail->setFrom('farshasepta064@gmail.com', 'Admin');
+        $mail->addAddress($_POST['email_penerima']);
+        $mail->Subject = $_POST['subject'];
+        $mail->Body    = $_POST['pesan'];
 
-    $mail->Subject = $_POST['subject'];
-    $mail->Body    = $_POST['pesan'];
-
-    if ($mail->send()) {
+        $mail->send();
         echo "<script>
-                alert('Email Berhasil Dikirimkan');
+                alert('Email Berhasil Dikirimkan!');
                 document.location.href = 'email.php';
-            </script>";
-    } else {
-        echo "<script>
-                alert('Email Gagal Dikirimkan');
-                document.location.href = 'email.php';
-            </script>";
+              </script>";
+        exit;
+    } catch (Exception $e) {
+        $error = "Gagal mengirim email: {$mail->ErrorInfo}";
     }
-
-    exit();
 }
 
 include 'layout/header.php';
@@ -67,8 +62,8 @@ include 'layout/header.php';
 
         <form action="" method="post">
             <div class="mb-3">
-                <label for="email penerima" class="form-label">Email Penerima</label>
-                <input type="text" class="form-control" id="email penerima" name="email penerima" placeholder="Email Penerima..." required>
+                <label for="email_penerima" class="form-label">Email Penerima</label>
+                <input type="email" class="form-control" id="email_penerima" name="email_penerima" placeholder="Email Penerima..." required>
             </div>
             <div class="mb-3">
                 <label for="subject" class="form-label">Subject</label>
@@ -76,11 +71,12 @@ include 'layout/header.php';
             </div>
             <div class="mb-3">
                 <label for="pesan" class="form-label">Pesan</label>
-                <textarea id="pesan" name="pesan" cols="30" rows="10" class="form-control"></textarea>
+                <textarea id="pesan" name="pesan" cols="30" rows="10" class="form-control" required></textarea>
             </div>
             <button type="submit" name="tambah" class="btn btn-primary" style="float: right;">Kirim</button>
+            <a href="index.php" class="btn btn-secondary" style="float: right; margin-right: 10px;">Kembali</a>
         </form>
     </div>
 </div>
 
-<?php include 'layout/footer.php'; ?>'layout/footer.php'; ?>?>
+<?php include 'layout/footer.php'; ?>

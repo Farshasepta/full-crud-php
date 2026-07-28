@@ -96,7 +96,7 @@ if (isset($_POST['login'])) {
         
     <main class="form-signin">
         <form action="" method="POST">
-            <img class="mb-4" src="assets/img/bootstrap-logo.svg" alt="" width="72" height="57">
+            <img class="mb-4" src="assets/img/logo.png" alt="" width="72" height="100">
             <h3 class="h3 mb-3 fw-normal">Login</h3>
 
             <?php if (isset($error)) : ?>

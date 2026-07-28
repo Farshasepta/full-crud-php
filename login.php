@@ -10,30 +10,45 @@ if (isset($_POST['login'])) {
     $username = mysqli_escape_string($db, $_POST['username']);
     $password = mysqli_escape_string($db, $_POST['password']);
 
-    // check username
-    $result = mysqli_query($db, "SELECT * FROM akun WHERE username = '$username'");
+    // secret key
+    $secret_key = "6LcCPGktAAAAAO_kUhbTWICgQ-pEYkTEaz7kJZQ2";
 
-    // jika ada usernya di database
-    if (mysqli_num_rows($result) == 1) {
-        // check passwordnya
-        $hasil = mysqli_fetch_assoc($result);
+    $verifikasi = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret=' . $secret_key . '&response=' . $_POST['g-recaptcha-response']);
+    $response = json_decode($verifikasi);
 
-        if (password_verify($password, $hasil['password'])) {
-            // set session
-            $_SESSION['login']        = true;
-            $_SESSION['id_akun']      = $hasil['id_akun'];
-            $_SESSION['nama']      = $hasil['nama'];
-            $_SESSION['username']      = $hasil['username'];
-            $_SESSION['email']      = $hasil['email'];
-            $_SESSION['level']      = $hasil['level'];
+    if ($response->success) {
+        // check username
+        $result = mysqli_query($db, "SELECT * FROM akun WHERE username = '$username'");
 
-            // jika login benar, diarahkan ke file index.php
-            header("Location: index.php");
-            exit;
+        // jika ada usernya di database
+        if (mysqli_num_rows($result) == 1) {
+            // check passwordnya
+            $hasil = mysqli_fetch_assoc($result);
+
+            if (password_verify($password, $hasil['password'])) {
+                // set session
+                $_SESSION['login']    = true;
+                $_SESSION['id_akun']  = $hasil['id_akun'];
+                $_SESSION['nama']     = $hasil['nama'];
+                $_SESSION['username'] = $hasil['username'];
+                $_SESSION['email']    = $hasil['email'];
+                $_SESSION['level']    = $hasil['level'];
+
+                // jika login benar, diarahkan ke file index.php
+                header("Location: index.php");
+                exit;
+            } else {
+                // jika password salah
+                $error = true;
+            }
+        } else {
+            // jika username tidak ditemukan
+            $error = true;
         }
+    } else {
+        // jika recaptcha tidak valid
+        $errorRecaptcha = true;
     }
-    // jika tidak ada usernya/loginnya salah
-    $error = true;
 }
 
 ?>
@@ -46,7 +61,7 @@ if (isset($_POST['login'])) {
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.84.0">
-    <title>Signin Template · Bootstrap v5.0</title>
+    <title>Login | Sistem CRUD</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sign-in/">
 
@@ -82,11 +97,17 @@ if (isset($_POST['login'])) {
     <main class="form-signin">
         <form action="" method="POST">
             <img class="mb-4" src="assets/img/bootstrap-logo.svg" alt="" width="72" height="57">
-            <h1 class="h3 mb-3 fw-normal">Admin Login</h1>
+            <h3 class="h3 mb-3 fw-normal">Login</h3>
 
             <?php if (isset($error)) : ?>
-            <div class="alert alert-danger">
+            <div class="alert alert-danger text-center">
                 <b>Username/Password SALAH</b>
+            </div>
+            <?php endif; ?>
+            
+            <?php if (isset($errorRecaptcha)) : ?>
+            <div class="alert alert-danger text-center">
+                <b>Recaptcha Tidak Valid</b>
             </div>
             <?php endif; ?>
 
@@ -99,11 +120,15 @@ if (isset($_POST['login'])) {
                 <label for="floatingPassword">Password</label>
             </div>
 
+            <div class="mb-3">
+                <div class="g-recaptcha" data-sitekey="6LcCPGktAAAAACw0NeYmzefxXeQ0VXOGkYjD7W6P"></div>
+            </div>
+
             <button class="w-100 btn btn-lg btn-primary" type="submit" name="login">Login</button>
             <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
         </form>
     </main>
 
-    
+    <script src="https://www.google.com/recaptcha/api.js"></script>
   </body>
 </html>

@@ -11,6 +11,15 @@ if (!isset($_SESSION["login"])) {
     exit;
 }
 
+// membatasi halaman seusai user login
+if ($_SESSION["level"] != 1 and $_SESSION["level"] != 2) {
+    echo "<script>
+            alert('Anda tidak punya hak akses');
+            document.location.href = 'crud-modal.php';
+        </script>";
+    exit;
+}
+
 $title = 'Tambah Barang';
 
 require_once 'config/app.php';

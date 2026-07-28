@@ -21,16 +21,16 @@ $id_barang = (int)$_GET['id_barang'];
 
 $barang = select("SELECT * FROM barang WHERE id_barang = $id_barang")[0];
 
-// check apakah tombol tambah ditekan
-if (isset($_POST['tambah'])) {
+// check apakah tombol ubah ditekan
+if (isset($_POST['ubah'])) {
     if (update_barang($_POST) > 0) {
         echo "<script>
-                alert('Data Barang Berhasil Ditambahkan');
+                alert('Data Barang Berhasil Diubah');
                 document.location.href = 'index.php';
                 </script>";
     } else {
         echo "<script>
-                alert('Data Barang Gagal Ditambahkan');
+                alert('Data Barang Gagal Diubah');
                 document.location.href = 'index.php';
                 </script>";
     }

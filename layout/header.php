@@ -25,8 +25,6 @@ include 'config/app.php';
   <link rel="stylesheet" href="assets-template/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
   <!-- iCheck -->
   <link rel="stylesheet" href="assets-template/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <!-- JQVMap -->
-  <link rel="stylesheet" href="assets-template/plugins/jqvmap/jqvmap.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="assets-template/dist/css/adminlte.min.css">
   <!-- overlayScrollbars -->
@@ -35,6 +33,9 @@ include 'config/app.php';
   <link rel="stylesheet" href="assets-template/plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="assets-template/plugins/summernote/summernote-bs4.min.css">
+
+  <!-- jQuery -->
+  <script src="assets-template/plugins/jquery/jquery.min.js"></script>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -182,7 +183,7 @@ include 'config/app.php';
     <!-- Brand Logo -->
     <a href="" class="brand-link">
       <img src="assets-template/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">AdminLTE 3</span>
+      <span class="brand-text font-weight-light">Admin</span>
     </a>
 
     <!-- Sidebar -->
@@ -216,25 +217,37 @@ include 'config/app.php';
                with font-awesome or any other icon font library -->
             <li class="nav-header">Daftar Menu</li>
             <li class="nav-item">
-                <a href="" class="nav-link">
+                <a href="index.php" class="nav-link">
                     <i class="nav-icon fas fa-box"></i>
                     <p> Data Barang</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="" class="nav-link">
+                <a href="mahasiswa.php" class="nav-link">
                     <i class="nav-icon fas fa-user-graduate"></i>
                     <p> Data Mahasiswa</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="" class="nav-link">
-                    <i class="nav-icon fas fa-user"></i>
-                    <p> Data Mahasiswa</p>
+                <a href="pegawai.php" class="nav-link">
+                    <i class="nav-icon fas fa-id-badge"></i>
+                    <p> Data Pegawai</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="" class="nav-link">
+                <a href="email.php" class="nav-link">
+                    <i class="nav-icon fas fa-envelope"></i>
+                    <p> Kirim Email (PHPMailer)</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="akun.php" class="nav-link">
+                    <i class="nav-icon fas fa-user-cog"></i>
+                    <p> Data Akun</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="logout.php" class="nav-link" onclick="return confirm('Yakin mau keluar?');">
                     <i class="nav-icon fas fa-sign-out-alt"></i>
                     <p> Logout</p>
                 </a>

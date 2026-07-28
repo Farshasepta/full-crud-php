@@ -12,7 +12,16 @@ if (!isset($_SESSION["login"])) {
 
 include 'config/app.php';
 
-// menerima id barang yang dipilih pengguna
+// membatasi halaman sesuai user login
+if ($_SESSION["level"] != 1) {
+    echo "<script>
+            alert('Anda tidak punya hak akses');
+            document.location.href = 'index.php';
+        </script>";
+    exit;
+}
+
+// menerima id akun yang dipilih pengguna
 $id_akun = (int)$_GET['id_akun'];
 
 if(delete_akun($id_akun) > 0) {

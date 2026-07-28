@@ -49,7 +49,7 @@ foreach ($data_mahasiswa as $mahasiswa) {
     $activeWorksheet->setCellValue('D' . $start, $mahasiswa['jk'])->getColumnDimension('D')->setAutoSize(true);
     $activeWorksheet->setCellValue('E' . $start, $mahasiswa['telepon'])->getColumnDimension('E')->setAutoSize(true);
     $activeWorksheet->setCellValue('F' . $start, $mahasiswa['email'])->getColumnDimension('F')->setAutoSize(true);
-    $activeWorksheet->setCellValue('G' . $start, 'http://localhost/crud-php/assets/img' . $mahasiswa['foto'])->getColumnDimension('G')->setAutoSize(true);
+    $activeWorksheet->setCellValue('G' . $start, 'http://localhost/crud_php/assets/img/' . $mahasiswa['foto'])->getColumnDimension('G')->setAutoSize(true);
 
     $start++;
 }

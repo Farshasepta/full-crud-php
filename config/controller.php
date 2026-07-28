@@ -38,6 +38,55 @@ function create_barang($post)
     return mysqli_affected_rows($db);
 }
 
+// fungsi menambahkan data pegawai
+function create_pegawai($post)
+{
+    global $db;
+
+    $nama    = strip_tags($post['nama']);
+    $jabatan = strip_tags($post['jabatan']);
+    $email   = strip_tags($post['email']);
+    $telepon = strip_tags($post['telepon']);
+    $alamat  = $post['alamat'];
+
+    $query = "INSERT INTO pegawai VALUES(null, '$nama', '$jabatan', '$email', '$telepon', '$alamat')";
+
+    mysqli_query($db, $query);
+
+    return mysqli_affected_rows($db);
+}
+
+// fungsi mengubah data pegawai
+function update_pegawai($post)
+{
+    global $db;
+
+    $id_pegawai = (int)$post['id_pegawai'];
+    $nama       = strip_tags($post['nama']);
+    $jabatan    = strip_tags($post['jabatan']);
+    $email      = strip_tags($post['email']);
+    $telepon    = strip_tags($post['telepon']);
+    $alamat     = $post['alamat'];
+
+    $query = "UPDATE pegawai SET nama = '$nama', jabatan = '$jabatan', email = '$email', telepon = '$telepon', alamat = '$alamat' WHERE id_pegawai = $id_pegawai";
+
+    mysqli_query($db, $query);
+
+    return mysqli_affected_rows($db);
+}
+
+// fungsi menghapus data pegawai
+function delete_pegawai($id_pegawai)
+{
+    global $db;
+
+    $query = "DELETE FROM pegawai WHERE id_pegawai = $id_pegawai";
+
+    mysqli_query($db, $query);
+
+    return mysqli_affected_rows($db);
+}
+
 // fungsi mengubah data barang
 function update_barang($post) 
 {
@@ -50,6 +99,10 @@ function update_barang($post)
 
     // query ubah data
     $query = "UPDATE barang SET nama = '$nama', jumlah = '$jumlah', harga = '$harga' WHERE id_barang = $id_barang";
+
+    mysqli_query($db, $query);
+
+    return mysqli_affected_rows($db);
 }
 
 // fungsi menghapus data barang
@@ -141,7 +194,9 @@ function delete_mahasiswa($id_mahasiswa)
 
     // ambil foto sesuai data yang dipilih
     $foto = select("SELECT * FROM mahasiswa WHERE id_mahasiswa = $id_mahasiswa")[0];
-    unlink("assets/img/". $foto['foto']);
+    if (file_exists("assets/img/". $foto['foto'])) {
+        unlink("assets/img/". $foto['foto']);
+    }
 
     // query hapus data mahasiswa
     $query = "DELETE FROM mahasiswa WHERE id_mahasiswa = $id_mahasiswa";
@@ -161,12 +216,12 @@ function update_mahasiswa($post)
     $prodi      = strip_tags($post['prodi']);
     $jk         = strip_tags($post['jk']);
     $telepon    = strip_tags($post['telepon']);
-    $alamat     = $post['$alamat'];
+    $alamat     = $post['alamat'];
     $email      = strip_tags($post['email']);
-    $foto       = strip_tags($post['fotoLama']);
+    $fotoLama   = strip_tags($post['fotoLama']);
 
     // check upload foto baru atau tidak
-    if ($_FILES['foto'] ['error'] == 4) {
+    if ($_FILES['foto']['error'] == 4) {
         $foto = $fotoLama;
     } else {
         $foto = upload_file();
@@ -202,16 +257,11 @@ function create_akun($post)
     return mysqli_affected_rows($db);
 }
 
-// fungsi menghapus data mahasiswa
+// fungsi menghapus data akun
 function delete_akun($id_akun) 
 {
     global $db;
 
-    // ambil foto sesuai data yang dipilih
-    $foto = select("SELECT * FROM akun WHERE id_akun = $id_akun")[0];
-    unlink("assets/img/". $foto['foto']);
-
-    // query hapus data mahasiswa
     $query = "DELETE FROM akun WHERE id_akun = $id_akun";
 
     mysqli_query($db, $query);
@@ -232,11 +282,14 @@ function update_akun($post)
     $nama       = strip_tags($post['nama']);
     $username   = strip_tags($post['username']);
     $email      = strip_tags($post['email']);
-    $password   = !empty($post['password']) ? passowrd_hash($_POST['password'], PASSWORD_DEFAULT) : $akun['password'];
     $level      = strip_tags($post['level']);
 
-    // query ubah data
-    $query = "UPDATE akun SET nama = '$nama', username = '$username', email = '$email', password = '$password', level = '$level' WHERE id_akun = $id_akun";
+    if (!empty($post['password'])) {
+        $password = password_hash($post['password'], PASSWORD_DEFAULT);
+        $query = "UPDATE akun SET nama = '$nama', username = '$username', email = '$email', password = '$password', level = '$level' WHERE id_akun = $id_akun";
+    } else {
+        $query = "UPDATE akun SET nama = '$nama', username = '$username', email = '$email', level = '$level' WHERE id_akun = $id_akun";
+    }
 
     mysqli_query($db, $query);
 

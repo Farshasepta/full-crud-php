@@ -76,7 +76,7 @@ if (isset($_POST['tambah'])) {
             <label for="foto" class="form-label">Foto</label>
             <input type="file" class="form-control" id="foto" name="foto" placeholder="Foto..." onchange="previewImg()">
 
-            <img src="assets/img/<?= $mahasiswa['foto']; ?>" alt="" class="img-preview mt-2" width="100px">
+            <img src="" alt="" class="img-thumbnail img-preview mt-2" width="100px" style="display: none;">
         </div>
         
         <button type="submit" name="tambah" class="btn btn-primary" style="float: right;"> <i class="fas fa-plus"></i> Tambah</button>
@@ -94,6 +94,7 @@ if (isset($_POST['tambah'])) {
 
         fileFoto.onload = function(e) {
             imgPreview.src = e.target.result;
+            imgPreview.style.display = 'block';
         }
     }
 </script>

@@ -45,10 +45,6 @@
 <script src="assets-template/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="assets-template/dist/js/adminlte.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="assets-template/dist/js/demo.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="assets-template/dist/js/pages/dashboard.js"></script>
 
 <!-- DataTables  & Plugins -->
 <script src="assets-template/plugins/datatables/jquery.dataTables.min.js"></script>
@@ -62,7 +58,48 @@
 <script src="assets-template/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <script>
   $(function() {
-    $('#barangTable').DataTable();
+    if (document.getElementById('barangTable')) {
+      $('#barangTable').DataTable();
+    }
+    if (document.getElementById('pegawaiTable')) {
+      $('#pegawaiTable').DataTable();
+    }
+    if (document.getElementById('mahasiswaTable')) {
+      $('#mahasiswaTable').DataTable();
+    }
+    if (document.getElementById('akunTable')) {
+      $('#akunTable').DataTable();
+    }
+  });
+</script>
+
+<!-- datatable client side -->
+<script>
+  $(function() {
+    $('example2').DataTable(); 
+  });
+</script>
+
+<!-- datatable serverside -->
+<script>
+  $(document).ready(function () {
+    $('#serverside').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+          "url": "mahasiswa-serverside.php?action=table_data",
+          "dataType": "json",
+          "type": "POST"
+        },
+        columns: [
+          {"data": "no"},
+          {"data": "nama"},
+          {"data": "prodi"},
+          {"data": "jk"},
+          {"data": "telepon"},
+          {"data": "aksi"},
+        ]
+    });
   });
 </script>
 </body>

@@ -34,7 +34,7 @@ if(isset($_POST['tambah'])) {
     } else {
         echo "<script>
                 alert('Data Akun Gagal Ditambahkan');
-                document.localtion.href = 'crud-modal.php';
+                document.location.href = 'crud-modal.php';
             </script>";
     }
 }
@@ -43,13 +43,13 @@ if(isset($_POST['tambah'])) {
 if(isset($_POST['ubah'])) {
     if(update_akun($_POST) > 0) {
         echo "<script>
-                alert('Data Akun Berhasil Ditambahkan');
+                alert('Data Akun Berhasil Diubah');
                 document.location.href = 'crud-modal.php';
             </script>";
     } else {
         echo "<script>
-                alert('Data Akun Gagal Ditambahkan');
-                document.localtion.href = 'crud-modal.php';
+                alert('Data Akun Gagal Diubah');
+                document.location.href = 'crud-modal.php';
             </script>";
     }
 }

@@ -85,7 +85,7 @@ $mahasiswa = select("SELECT * FROM mahasiswa WHERE id_mahasiswa = $id_mahasiswa"
         </div>
         <div class="mb-3">
             <label for="foto" class="form-label">Foto</label>
-            <input type="file" class="form-control" id="foto" name="foto" placeholder="foto mahasiswa..." required>
+            <input type="file" class="form-control" id="foto" name="foto" placeholder="foto mahasiswa...">
             <p>
                 <small>Gambar Sebelumnya</small>
             </p>

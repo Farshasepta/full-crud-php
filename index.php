@@ -22,9 +22,36 @@ if ($_SESSION["level"] != 1 and $_SESSION["level"] != 2) {
 
 $title = 'Data Barang';
 
+require_once 'config/app.php';
+
+$tgl_awal  = '';
+$tgl_akhir = '';
+
+// pagination
+$jumlahDataPerhalaman = 5;
+$halamanAktif = (isset($_GET['halaman']) ? (int)$_GET['halaman'] : 1);
+$awalData     = ($jumlahDataPerhalaman * $halamanAktif) - $jumlahDataPerhalaman;
+
+if(isset($_POST['filter'])) {
+  $tgl_awal  = strip_tags($_POST['tgl_awal']);
+  $tgl_akhir = strip_tags($_POST['tgl_akhir']);
+
+  $tgl_awal_full  = $tgl_awal . " 00:00:00";
+  $tgl_akhir_full = $tgl_akhir . " 23:59:59";
+
+  $jumlahData    = count(select("SELECT * FROM barang WHERE tanggal BETWEEN '$tgl_awal_full' AND '$tgl_akhir_full'"));
+  $jumlahHalaman = ceil($jumlahData / $jumlahDataPerhalaman);
+
+  $data_barang = select("SELECT * FROM barang WHERE tanggal BETWEEN '$tgl_awal_full' AND '$tgl_akhir_full' ORDER BY id_barang DESC LIMIT $awalData, $jumlahDataPerhalaman");
+} else {
+  $jumlahData    = count(select("SELECT * FROM barang"));
+  $jumlahHalaman = ceil($jumlahData / $jumlahDataPerhalaman);
+
+  $data_barang = select("SELECT * FROM barang ORDER BY id_barang DESC LIMIT $awalData, $jumlahDataPerhalaman");
+}
 include 'layout/header.php';
 
-$data_barang = select ("SELECT * FROM barang");
+
 ?>
 
   <!-- Content Wrapper. Contains page content -->
@@ -110,11 +137,14 @@ $data_barang = select ("SELECT * FROM barang");
               <div class="card-header">
                 <h3 class="card-title">Data Barang</h3>
                 <div class="card-tools">
+                  <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalFilter">
+                    <i class="fas fa-filter"></i> Filter Data
+                  </button>
                   <a href="tambah-barang.php" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tambah</a>
                 </div>
               </div>
               <div class="card-body">
-                <table id="barangTable" class="table table-bordered table-hover">
+                <table class="table table-bordered table-hover">
                   <thead>
                     <tr>
                       <th>No</th>
@@ -146,6 +176,37 @@ $data_barang = select ("SELECT * FROM barang");
                     <?php endforeach; ?>
                   </tbody>
                 </table>
+                
+                <div class="mt-2 justify-content-end d-flex">
+                  <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                      <?php if ($halamanAktif > 1) : ?>
+                        <li class="page-item">
+                          <a class="page-link" href="?halaman=<?= $halamanAktif - 1 ?>" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                          </a>
+                        </li>
+                      <?php endif; ?>
+
+                      <?php for ($i = 1; $i <= $jumlahHalaman; $i++) : ?>
+                        <?php if ($i == $halamanAktif) : ?>
+                          <li class="page-item active"><span class="page-link"><?= $i; ?></span></li>
+                        <?php else : ?>
+                          <li class="page-item"><a class="page-link" href="?halaman=<?= $i; ?>"><?= $i; ?></a></li>
+                        <?php endif; ?>
+                      <?php endfor; ?>
+
+                      <?php if ($halamanAktif < $jumlahHalaman) : ?>
+                        <li class="page-item">
+                          <a class="page-link" href="?halaman=<?= $halamanAktif + 1 ?>" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                          </a>
+                        </li>
+                      <?php endif; ?>
+                    </ul>
+                  </nav>
+                </div>
+                
               </div>
             </div>
           </div>
@@ -155,6 +216,36 @@ $data_barang = select ("SELECT * FROM barang");
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
+  </div>
+
+  <!-- Modal Filter -->
+  <div class="modal fade" id="modalFilter" tabindex="-1" aria-labelledby="modalFilterLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-success">
+          <h5 class="modal-title" id="modalFilterLabel"><i class="fas fa-filter"></i> Filter Data</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="" method="post">
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="tgl_awal">Tanggal Awal</label>
+              <input type="date" name="tgl_awal" id="tgl_awal" class="form-control" value="<?= $tgl_awal; ?>">
+            </div>
+            <div class="form-group">
+              <label for="tgl_akhir">Tanggal Akhir</label>
+              <input type="date" name="tgl_akhir" id="tgl_akhir" class="form-control" value="<?= $tgl_akhir; ?>">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a href="index.php" class="btn btn-secondary">Reset</a>
+            <button type="submit" name="filter" class="btn btn-success"><i class="fas fa-search"></i> Tampilkan</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 
 <?php include 'layout/footer.php'; ?>

@@ -32,11 +32,11 @@ $data_mahasiswa = select("SELECT * FROM mahasiswa ORDER BY id_mahasiswa DESC");
 <div class="container mt-5">
     <h1><i class="fas fa-users"></i> Data Mahasiswa</h1>
     <hr>
-    <a href="tambah-mahasiswa.php" class="btn btn-primary mb-1"><i class="fa-solid fa-circle-plus"></i>Tambah</a>
+    <a href="tambah-mahasiswa.php" class="btn btn-primary mb-1"><i class="fas fa-plus-circle"></i> Tambah</a>
 
-    <a href="download-excel-mahasiswa.php" class="btn btn-success mb-1"><i class="fa-solid fa-file-excel"></i>Download Excel</a>
+    <a href="download-excel-mahasiswa.php" class="btn btn-success mb-1"><i class="fas fa-file-excel"></i> Download Excel</a>
 
-    <a href="download-pdf-mahasiswa.php" class="btn btn-danger mb-1"><i class="fa-solid fa-file-pdf"></i>Download PDF</a>
+    <a href="download-pdf-mahasiswa.php" class="btn btn-danger mb-1"><i class="fas fa-file-pdf"></i> Download PDF</a>
 
     <table id="mahasiswaTable" class="table table-bordered table-striped">
         <thead>
